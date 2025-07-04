@@ -1,0 +1,112 @@
+```{r}
+require(tidyverse)
+require(data.table)
+require(randomForest)
+require(mclust)
+require(rpart)
+require(rpart.plot)
+require(foreign)
+require(e1071)
+```
+Selection
+#Data Source
+#https://www.kaggle.com/datasets/whenamancodes/credit-card-customers-prediction
+
+Pre-processing
+```{r}
+require(stringr)
+require(sqldf)
+
+data <- read.csv('BankChurners.csv')
+
+missing_data<-is.na(data)
+
+missing_df<-as.data.frame(missing_data)
+
+missing_df
+
+```
+
+Excellent: 0-10% utilization
+Good: 10-30% utilization
+Fair: 30-50% utilization
+Poor: 50% or higher utilization
+Transformation
+```{r}
+Transform <- data
+
+Transform$Util_Rank<-sapply(Transform$)
+
+
+
+```
+
+Descriptive Analysis
+Question1 - Basic Aggregration
+```{r}
+#Summarise the average credit limit by different card type
+
+#count the number of different education level
+
+#Summaries Average of Open to buy all Income Category
+
+```
+
+Question2 - Basic statics (Bar)
+```{r}
+
+```
+
+Question3 - Basic statics (pie)
+```{r}
+
+```
+
+Question4 - Relation(scatter)
+```{r}
+
+```
+
+https://www.digitalocean.com/community/tutorials/normalize-data-in-r
+https://stats.stackexchange.com/questions/298507/mclust-model-names-corresponding-to-common-models-i-e-those-used-for-lpa-lc
+Modelname EEE = Equal variances and equal covariances
+if you want to make the clustering like a matrix, try to use modelname EEE
+Question5 - Clustering
+```{r}
+
+```
+
+Question6 - pattern finding(CART tree)
+```{r}
+
+rpart.plot(Tree)
+```
+
+Question7 - classification(Naive Bias)
+```{r}
+#NB Classification
+
+
+#new customers
+
+
+#make an enquiry
+predict()
+```
+
+Question8 - Prediction/simulation (random Forest)
+```{r}
+#model building
+
+
+#model testing
+
+#new customer
+
+
+#choose one row data for testing
+predict()
+```
+
+Evualtion
+#Write you finding in Report, Thanks!
