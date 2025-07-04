@@ -35,9 +35,34 @@ Transformation
 ```{r}
 Transform <- data
 
-Transform$Util_Rank<-sapply(Transform$)
+Transform$Util_Rank<-sapply(Transform$Avg_Utilization_Ratio,function(x){
+ if (x <0.1 ){
+   return('Excellent')
+ }else if (x<0.3){
+   return('Good')
+ }else if (x<0.5){
+   return('Fair')
+ }else{
+   return('Poor')
+ }  
+})
 
 
+column_to_move <- "Util_Rank" 
+target_column <- "Avg_Utilization_Ratio" 
+
+
+target_position <- match(target_column, names(Transform)) + 1  
+
+
+new_order <- c(names(Transform)[1:(target_position - 1)], 
+               column_to_move, 
+               names(Transform)[target_position:length(names(Transform))])
+
+
+Transform <- Transform[, new_order]
+
+Transform
 
 ```
 
@@ -45,6 +70,7 @@ Descriptive Analysis
 Question1 - Basic Aggregration
 ```{r}
 #Summarise the average credit limit by different card type
+
 
 #count the number of different education level
 
