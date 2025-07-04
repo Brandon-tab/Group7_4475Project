@@ -71,27 +71,40 @@ Question1 - Basic Aggregration
 ```{r}
 #Summarise the average credit limit by different card type
 Credit_Average<-tapply(Transform$Credit_Limit, Transform$Card_Category, mean)
-as.data.frame(Credit_Average)
+Credit_Average_df<-as.data.frame(Credit_Average)
+Credit_Average_df
 
 #count the number of different education level
 
-Level_Count<-tapply(Transform$Education_Level, Transform$Education_Level, length)
-as.data.frame(Level_Count)
+Education_Count<-tapply(Transform$Education_Level, Transform$Education_Level, length)
+Education_Count_df<-as.data.frame(Education_Count)
+Education_Count_df
 
 #Summaries Average of Open to buy all Income Category
 
 Open_to_buy_Average<-tapply(Transform$Avg_Open_To_Buy, Transform$Income_Category, mean)
-as.data.frame(Open_to_buy_Average)
-
+Open_to_buy_Average_df<-as.data.frame(Open_to_buy_Average)
+Open_to_buy_Average_df
 ```
 
 Question2 - Basic statics (Bar)
 ```{r}
 
+barplot(Open_to_buy_Average_df$Open_to_buy_Average,  
+        names.arg = rownames(Open_to_buy_Average_df)
+        
+        ) 
+
+
 ```
 
 Question3 - Basic statics (pie)
 ```{r}
+
+pie(Education_Count_df$Education_Count,
+    labels = rownames(Education_Count_df),
+   )
+
 
 ```
 
