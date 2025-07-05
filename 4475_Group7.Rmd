@@ -89,17 +89,27 @@ Open_to_buy_Average_df
 
 Question2 - Basic statics (Bar)
 ```{r}
+ordered_indices <- order(Open_to_buy_Average_df$Open_to_buy_Average, decreasing = TRUE)
+ordered_values <- Open_to_buy_Average_df$Open_to_buy_Average[ordered_indices]
+ordered_names <- rownames(Open_to_buy_Average_df)[ordered_indices]
 
-barplot(Open_to_buy_Average_df$Open_to_buy_Average,  
-        names.arg = rownames(Open_to_buy_Average_df)
-        
-        ) 
+barplot(ordered_values,
+        names.arg = ordered_names,
+        ylim = c(500, max(ordered_values) + 100), 
+        cex.names = 0.8
+       )
+
 
 
 ```
 
 Question3 - Basic statics (pie)
 ```{r}
+
+barplot(Open_to_buy_Average_df$Open_to_buy_Average,  
+        names.arg = rownames(Open_to_buy_Average_df)
+       
+        ) 
 
 pie(Education_Count_df$Education_Count,
     labels = rownames(Education_Count_df),
