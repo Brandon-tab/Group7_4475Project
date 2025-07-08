@@ -216,28 +216,58 @@ rpart.plot(Tree,
 
 Question7 - classification(Naive Bias)
 ```{r}
-#NB Classification
-
-
 #new customers
-
-
+new_custom <- read.csv("new_custom.csv")
+new_customer <- read.csv("new_customer.csv")
+#NB Classification
+model <- naiveBayes(Util_Rank ~ Customer_Age
+                    +Gender
+                    +Dependent_count
+                    +Education_Level
+                    +Marital_Status
+                    +Income_Category
+                    +Months_on_book
+                    +Total_Relationship_Count, data = Transform)
 #make an enquiry
-predict()
+predict(model, new_custom)
+predict(model, new_customer)
+
+new_predictions <- predict(model, new_custom)
+new_custom$Predicted_Utilization <- new_predictions
+formatted_results <- table(new_custom$Predicted_Utilization)
+formatted_results
+
+new_predictions2 <- predict(model, new_customer)
+new_customer$Predicted_Utilization <- new_predictions2
+formatted_results <- table(new_customer$Predicted_Utilization)
+formatted_results
 ```
 
 Question8 - Prediction/simulation (random Forest)
 ```{r}
-#model building
+require(randomForest)
+require(ggplot2)
 
+#model building
+model <- randomForest(formula=Credit_Limit ~ Customer_Age
+                      +Gender
+                      +Dependent_count
+                      +Education_Level
+                      +Marital_Status
+                      +Income_Category
+                      +Months_on_book
+                      +Total_Relationship_Count, data = Transform,ntree=1000)
 
 #model testing
-
+plot(model)
 #new customer
 
 
 #choose one row data for testing
-predict()
+print("-----------------------------------new_custom------------------------------------")
+predict(model, new_custom)
+print("-----------------------------------new_customer----------------------------------")
+predict(model, new_customer)
 ```
 
 Evualtion
