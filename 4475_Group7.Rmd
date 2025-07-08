@@ -105,13 +105,11 @@ barplot(ordered_values,
 
 Question3 - Basic statics (pie)
 ```{r}
+Education_Count_copy<-Education_Count_df
+Education_Count_copy
 
-barplot(Open_to_buy_Average_df$Open_to_buy_Average,  
-        names.arg = rownames(Open_to_buy_Average_df)
-       
-        ) 
 
-pie(Education_Count_df$Education_Count,
+pie(Education_Count_copy$Education_Count,
     labels = rownames(Education_Count_df),
    )
 
@@ -120,6 +118,26 @@ pie(Education_Count_df$Education_Count,
 
 Question4 - Relation(scatter)
 ```{r}
+Transform_copy <- Transform
+Transform_copy
+plot( Transform_copy$Total_Trans_Amt,Transform_copy$Total_Trans_Ct,
+     xlab = "Transform$Total_Trans_Amt", 
+     ylab = "Transform$Total_Trans_Ct"
+
+     )
+# Add x-axis ticks (interval of 5000)
+axis(1, at = seq(0, max(Transform_copy$Total_Trans_Amt), by = 5000))
+
+# Add y-axis ticks (interval of 20) 
+axis(2, at = seq(0, max(Transform_copy$Total_Trans_Ct), by = 20))
+
+# Calculate linear regression model
+lm_model <- lm(Total_Trans_Ct ~ Total_Trans_Amt, data = Transform_copy)
+
+# Add red regression line
+abline(lm_model, col = "red", lwd = 2)
+
+
 
 ```
 
@@ -129,13 +147,71 @@ Modelname EEE = Equal variances and equal covariances
 if you want to make the clustering like a matrix, try to use modelname EEE
 Question5 - Clustering
 ```{r}
+require(mclust)
+require(ggplot2)
+set.seed(13)  
+
+Clustering_Transform <- Transform$Card_Category
+data <- data.frame(Card_Category = Clustering_Transform,
+                   Total_Trans_Ct = Transform$Total_Trans_Ct, 
+                   Customer_Age = Transform$Customer_Age)
+
+# Data preprocessing: removing missing values
+data <- na.omit(data)
+
+# Standardize data
+data_scaled <- scale(data[, c("Total_Trans_Ct", "Customer_Age")])
+# Use Mclust for clustering, G = 1:4, model name is EEE
+model <- Mclust(data_scaled, G = 1:4, modelNames = "EEE")
+summary(model)
+
+# Add cluster labels to the data frame
+data$cluster <- factor(model$classification)
+
+
+ggplot(data, aes(x = Total_Trans_Ct, y = Customer_Age, color = cluster)) +
+  geom_point(alpha = 0.6) +
+  geom_hline(yintercept = median(data$Customer_Age), linetype = "dashed", color = "black") +  # middle
+  geom_vline(xintercept = median(data$Total_Trans_Ct), linetype = "dashed", color = "black") +  
+  labs(title = "Clustering", 
+       x = "Total_Trans_Ct", 
+       y = "Customer_Age", 
+       color = "Cluster") +
+  theme_minimal() +
+  theme(legend.position = "top")+
+   scale_x_continuous(breaks = seq(min(data$Total_Trans_Ct), max(data$Total_Trans_Ct), by = 20))
+
+
 
 ```
 
 Question6 - pattern finding(CART tree)
 ```{r}
+require(rpart)
+require(rpart.plot)
 
-rpart.plot(Tree)
+treeData <- Transform
+
+data_clean <- treeData[, c("Total_Revolving_Bal", "Util_Rank", "Income_Category","Avg_Utilization_Ratio")]
+
+
+set.seed(38) 
+
+
+index <- sample(1:nrow(data_clean), 0.7 * nrow(data_clean))  
+train_data <- data_clean[index, ]
+test_data <- data_clean[-index, ]
+
+
+Tree <- rpart(Util_Rank~Total_Revolving_Bal+Income_Category,data = train_data)
+
+
+rpart.plot(Tree, 
+           fallen.leaves = TRUE,      
+           main = "Decision Tree for Credit Utilization Behavior",
+           box.palette = "RdYlGn",   
+           shadow.col = "gray",       
+           digits = 2)                             
 ```
 
 Question7 - classification(Naive Bias)
