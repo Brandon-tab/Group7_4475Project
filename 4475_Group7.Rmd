@@ -107,12 +107,18 @@ Question3 - Basic statics (pie)
 ```{r}
 Education_Count_copy<-Education_Count_df
 Education_Count_copy
-
+percentages <- round(Education_Count_copy$Education_Count / sum(Education_Count_copy$Education_Count) * 100, 1)
+percent_df <- data.frame(
+    Education = rownames(Education_Count_df),
+    Count = Education_Count_copy$Education_Count,
+    Percentage = paste(percentages, "%")
+)
+percent_df <- percent_df[order(-percent_df$Count), ]  
+percent_df
 
 pie(Education_Count_copy$Education_Count,
     labels = rownames(Education_Count_df),
    )
-
 
 ```
 
