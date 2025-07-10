@@ -274,7 +274,37 @@ print("-----------------------------------new_custom----------------------------
 predict(model, new_custom)
 print("-----------------------------------new_customer----------------------------------")
 predict(model, new_customer)
+
+
 ```
 
 Evualtion
 #Write you finding in Report, Thanks!
+
+```{r}
+# Reference
+
+similar_customers <- subset(Transform, 
+                          Income_Category == "$120K +" &
+                          Education_Level == "Graduate" &
+                          Total_Relationship_Count == 5 &
+                          Customer_Age >= 38 & 
+                          Customer_Age <= 44 &
+                          Marital_Status == "Married")
+
+stats <- summary(similar_customers$Credit_Limit)
+quantiles <- quantile(similar_customers$Credit_Limit, probs = c(0.25, 0.75))
+
+hist(similar_customers$Credit_Limit, 
+     breaks = seq(0, 30000, by = 2000),
+     main = "Credit Limit Distribution for Similar Customers ($120K+ Income, 5 Products)",
+     xlab = "Credit Limit")
+
+abline(v = 17799.671, col = "red", lwd = 2)  # Predicted value
+abline(v = stats["Median"], col = "blue", lty = 2)  # Historical median
+
+legend("topright", 
+       legend = c("Predicted Value", "Historical Median"),
+       col = c("red", "blue"),
+       lty = c(1, 2))
+```
